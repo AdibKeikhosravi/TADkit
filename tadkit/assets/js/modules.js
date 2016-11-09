@@ -920,6 +920,7 @@
 		.factory('GenoverseService', GenoverseService);
 
 	function GenoverseService(ONLINE, $log, $document, $q, $http, $timeout, $rootScope) {
+		$log.info("Loading Genoverse...");
 
 		// example genoverse-config.txt >> TODO: change to json
 		var genoverseConfigTxt = "{container:'#browser-genoverse-6',genome:'grch38',chr:13,start:32296945,end:32370557,plugins:['controlPanel','karyotype','trackControls','resizer','focusRegion','fullscreen','tooltips','fileDrop'],tracks:[Genoverse.Track.Scalebar]}";
@@ -974,7 +975,7 @@
 					var cssReset = $document[0].createElement("link");
 					cssReset.rel = "stylesheet";
 					cssReset.type = 'text/css';
-					cssReset.href = "assets/js/genoverse-reset.css";
+					cssReset.href = "modules/browsers/genoverse-reset.css";
 
 					var node = $document[0].getElementsByTagName('body')[0];
 					node.appendChild(scriptTag);

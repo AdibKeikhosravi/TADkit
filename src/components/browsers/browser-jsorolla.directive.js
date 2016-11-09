@@ -56,8 +56,8 @@
 					var AVAILABLE_SPECIES;
 					// var CELLBASE_HOST = 'https://wwwdev.ebi.ac.uk/cellbase';
 					// var CELLBASE_HOST = 'https://www.ebi.ac.uk/cellbase';
-					var CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
-					// var CELLBASE_HOST = "http://bioinfo.hpc.cam.ac.uk/cellbase";
+					// var CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
+					var CELLBASE_HOST = "http://bioinfo.hpc.cam.ac.uk/cellbase";
 
 					var CELLBASE_VERSION = "v3";
 
@@ -159,7 +159,8 @@
 							drawNavigationBar : false,
 							drawKaryotypePanel : false,
 							drawChromosomePanel : false,
-							drawOverviewTrackListPanel : false
+							drawOverviewTrackListPanel : false,
+							drawStatusBar : false
 						});
 
 						var tracks = [];
@@ -189,6 +190,7 @@
 							maxLabelRegionSize : 10000000,
 							minTranscriptRegionSize : 200000,
 							height : 100,
+							resizable : true,
 
 							renderer: new GeneRenderer({
 								handlers: {
@@ -198,14 +200,13 @@
 									}
 								}
 							}),
-
 							dataAdapter : new CellBaseAdapter({
 								category : "genomic",
 								subCategory : "region",
 								resource : "gene",
 								species : genomeViewer.species,
 								params : {
-									exclude : 'transcripts'
+									exclude : "transcripts,chunkIds"
 									// exclude : "transcripts.tfbs,transcripts.xrefs,transcripts.exons.sequence"
 								},
 								cacheConfig : {

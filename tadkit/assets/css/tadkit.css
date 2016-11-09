@@ -1,3 +1,107 @@
+/*** MATERIAL DESIGN CUSTOM THEME ***/
+/*
+ * @see https://material.angularjs.org/latest/Theming/03_configuring_a_theme
+ * @see http://stackoverflow.com/questions/29100952/my-own-styles-in-angular-material-ui
+ */
+
+/* Hide default input tag button in preference of md-button
+ * see data-import.html
+ */
+.md-button[type="file"] > input[type="file"] {
+  display: none;
+}
+/* Icon border sofen color */
+md-checkbox.md-tadkit-theme:not([disabled]).md-primary .md-icon {
+	border-color: rgba(76,175,80,0.37);
+}
+
+/*** TOPBAR ***/
+/* md-toolbar height override */
+md-toolbar.md-tadkit-theme:not(.md-menu-toolbar) {
+	min-height: 48px;
+}
+/* NB: md-toolbar-tools creates flex row */
+md-toolbar.md-tadkit-theme .md-toolbar-tools {
+	height: 48px;
+	max-height: 48px;
+}
+/* Genome region smaller than organism title */
+md-toolbar.md-tadkit-theme .tad-region, {
+	font-size: 1.0rem;
+}
+/* Topbar icons in white */
+a.md-button.md-tadkit-theme.md-accent:not([disabled]) md-icon,
+.md-button.md-tadkit-theme.md-accent:not([disabled]) md-icon,
+md-toolbar.md-tadkit-theme:not(.md-menu-toolbar) md-icon,
+md-input-container.md-tadkit-theme:not(.md-input-invlaid).md-input-focused md-icon {
+	color: #fff;
+}
+md-input-container.md-tadkit-theme .md-input {
+	text-align: end;
+	color: #fff;
+	border-color: rgba(255,255,255,0.1);
+	font-size: 1.0rem;
+}
+md-input-container.md-tadkit-theme .md-input:focus {
+	background-color: rgba(255,255,255,0.25);
+}
+md-input-container.md-tadkit-theme .md-errors-spacer {
+	float: none;
+    min-height: 0;
+}
+
+/*md-input-container.md-icon-float>md-icon {
+	position: absolute;
+	top: 14px;
+	left: 24px;
+}
+*/
+.md-button.md-icon-button.md-tadkit-theme {
+	width: auto;
+}
+md-checkbox.md-tadkit-theme { margin: 3px; }
+
+/*** SIDEBARS ***/
+md-sidenav.md-tadkit-theme.md-locked-open { /*unused*/
+  /*width: 244px;*/
+  /*min-width: 244px;*/
+  /*max-width: 244px;*/
+}
+md-sidenav.md-tadkit-theme md-list-item {
+/*  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0px 16px;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  width: 100%;
+*/
+   /*max-height: 40px;*/
+}
+
+/*** Components ***/
+/*md-grid-list.md-tadkit-theme md-grid-tile md-grid-tile-header,
+md-grid-list.md-tadkit-theme md-grid-tile md-grid-tile-footer {
+	color: inherit;
+	background: rgba(255, 255, 255, 0.28);
+}
+*/
+/* Panels */
+/*md-list-item.md-tadkit-theme .md-secondary-container,
+md-list-item.md-tadkit-theme .md-secondary,
+md-list-item.md-tadkit-theme .md-list-item-inner .md-secondary-container,
+md-list-item.md-tadkit-theme .md-list-item-inner .md-secondary {
+  margin-left: 16px;
+  position: absolute;
+  right: 16px;
+  top: 10%;
+}
+*/
 /* TADkit GENERAL Stylesheet
  * primary color: rgba(76,175,80,0.8) == grass green
  * secondary color: rgba(205,220,57,0.87) == yellow ochre
@@ -356,3 +460,288 @@ track {
 }
 
 
+
+/* TADkit SVG Stylesheet
+ * Used in Tracks
+ * separated as not recognized by SASS parser
+ */
+
+svg {
+	font: 0.7rem sans-serif;
+	max-height: 100%; /* Webkit height error fix */
+}
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 2px;
+	shape-rendering: crispEdges;
+}
+.axis text { fill: #999; }
+.brush .extent {
+	stroke: #;
+	fill-opacity: .25;
+	shape-rendering: crispEdges;
+}
+/* track-slider */
+.track-slider .axis path {}
+.track-slider .background {
+	cursor: n-resize !important;
+}
+.track-slider .handle {
+	fill: #fff;
+	stroke: #ccc;
+	stroke-width: 2;
+	cursor: col-resize;
+}
+.track-slider .axis text, .track-slider .axis line {}
+
+/* track-genes */
+.track-genes .axis path {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1px;
+}
+
+#highlight {
+	fill: none;
+	stroke: #f00;
+	stroke-width: 1px;
+}
+/* wiggle_0 */
+.wiggle_0 {
+	margin-top: -4px !important;
+}
+.wiggle_0 .component-header {
+	/*margin: 0;*/
+}
+.wiggle_0 .component-body {
+	font-size: 0.2rem;
+}
+#highlight.highlight-follow {
+	fill: #999;
+	stroke: #fff;
+	stroke-width: 0px;
+}
+
+.lower-tracks {
+	margin-top: 20px !important;
+}
+
+.context {
+	fill: hsla(120,50%,50%,0.4);
+}
+/* Focus - Biotype colors */
+.undefined {
+	fill: hsla(120,50%,50%,0.4);
+}
+.protein_coding {
+	fill: hsla(120,50%,50%,0.4);
+}
+.pseudogene {
+	fill: hsla(120,50%,50%,0.4);
+}
+.ncRNA {
+	fill: hsla(120,50%,50%,0.4);
+}
+.snoRNA {
+	fill: hsla(120,50%,50%,0.4);
+}
+.pre_miRNA {
+	fill: hsla(120,50%,50%,0.4);
+}
+.tRNA {
+	fill: hsla(120,50%,50%,0.4);
+}
+.snRNA {
+	fill: hsla(120,50%,50%,0.4);
+}
+/* track-proximities */ 
+data-tk-proximities path {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1px;
+	shape-rendering: crispEdges;
+}
+#proximities line, #proximities .tick text {
+	display: none;
+}
+.particle {
+	fill: hsla(300, 100%, 25%,1.0);
+}
+
+/* track-filion */ 
+data-tk-component-bedgraph path {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1px;
+	shape-rendering: crispEdges;
+}
+#H1 .tick line, #H1 .tick text, 
+#HP1 .tick line, #HP1 .tick text, 
+#BRM .tick line, #BRM .tick text,
+#MRG15 .tick line, #MRG15 .tick text,
+#PC .tick line, #PC .tick text {
+	display: none;
+}
+data-tk-component-bedgraph rect {
+	color: #fff;
+	fill: none;
+	stroke: #fff;
+	stroke-width: 0px;
+	shape-rendering: crispEdges;
+}
+.HP1 {
+	fill: hsla(130,58%,33%,0.4);
+}
+.BRM {
+	fill: hsla(360,81%,50%,0.4);
+}
+.MRG15 {
+	fill: hsla(80,100%,50%,0.4);
+}
+.PC {
+	fill: hsla(240,100%,70%,0.4);
+}
+.H1 {
+	fill: hsla(0,0%,26%,0.6);
+}
+/* TADkit TYPOGRAPHY Stylesheet
+ * Used in Tracks
+ * separated as not recognized by SASS parser
+ */
+ @font-face {
+	font-family: 'tadkit';
+	src:url('../fonts/tadkit.eot?-d942yg');
+	src:url('../fonts/tadkit.eot?#iefix-d942yg') format('embedded-opentype'),
+		url('../fonts/tadkit.woff?-d942yg') format('woff'),
+		url('../fonts/tadkit.ttf?-d942yg') format('truetype'),
+		url('../fonts/tadkit.svg?-d942yg#tadkit') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'tadkit';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+md-icon {
+  font-size: 24px;
+}
+.md-icon-sm {
+  font-size: 12px;
+}
+
+/* IcoMoon code <md-icon> classes */
+
+.icon-exit-to-app:before {
+	content: "\e60f";
+}
+
+.icon-info:before {
+	content: "\e617";
+}
+
+.icon-info-outline:before {
+	content: "\e618";
+}
+
+.icon-input:before {
+	content: "\e60e";
+}
+
+.icon-open-in-browser:before {
+	content: "\e600";
+}
+
+.icon-perm-identity:before {
+	content: "\e605";
+}
+
+.icon-search:before {
+	content: "\e601";
+}
+
+.icon-settings:before {
+	content: "\e602";
+}
+
+.icon-swap-horiz:before {
+	content: "\e60b";
+}
+
+.icon-view-carousel:before {
+	content: "\e606";
+}
+
+.icon-view-module:before {
+	content: "\e607";
+}
+
+.icon-fast-forward:before {
+	content: "\e60c";
+}
+
+.icon-fast-rewind:before {
+	content: "\e60d";
+}
+
+.icon-pause:before {
+	content: "\e608";
+}
+
+.icon-play-arrow:before {
+	content: "\e609";
+}
+
+.icon-add:before {
+	content: "\e603";
+}
+
+.icon-clear:before {
+	content: "\e604";
+}
+
+.icon-cloud-download:before {
+	content: "\e610";
+}
+
+.icon-file-upload:before {
+	content: "\e611";
+}
+
+.icon-keyboard-arrow-left:before {
+	content: "\e60a";
+}
+
+.icon-keyboard-arrow-right:before {
+    content: "\e61a";
+}
+
+.icon-keyboard-backspace:before {
+	content: "\e612";
+}
+
+.icon-check-box:before {
+	content: "\e613";
+}
+
+.icon-check-box-outline-blank:before {
+	content: "\e614";
+}
+
+.icon-radio-button-off:before {
+	content: "\e615";
+}
+
+.icon-radio-button-on:before {
+	content: "\e616";
+}

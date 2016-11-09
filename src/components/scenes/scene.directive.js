@@ -262,13 +262,13 @@
 
 					$rootScope.$on('$stateChangeStart', function() {
 						// cancelAnimationFrame( animation );
-						$log.info("$stateChangeStart");
+						$log.debug("$stateChangeStart");
 					});
 					$rootScope.$on('$stateNotFound', function() {
 						$log.warn("$stateNotFound");
 					});
 					$rootScope.$on('$stateChangeSuccess', function() {
-						$log.info("$stateChangeSuccess");
+						$log.debug("$stateChangeSuccess");
 					});
 					$rootScope.$on('$stateChangeError', function() {
 						$log.warn("$stateChangeError");

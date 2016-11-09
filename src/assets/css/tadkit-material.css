@@ -1,0 +1,104 @@
+/*** MATERIAL DESIGN CUSTOM THEME ***/
+/*
+ * @see https://material.angularjs.org/latest/Theming/03_configuring_a_theme
+ * @see http://stackoverflow.com/questions/29100952/my-own-styles-in-angular-material-ui
+ */
+
+/* Hide default input tag button in preference of md-button
+ * see data-import.html
+ */
+.md-button[type="file"] > input[type="file"] {
+  display: none;
+}
+/* Icon border sofen color */
+md-checkbox.md-tadkit-theme:not([disabled]).md-primary .md-icon {
+	border-color: rgba(76,175,80,0.37);
+}
+
+/*** TOPBAR ***/
+/* md-toolbar height override */
+md-toolbar.md-tadkit-theme:not(.md-menu-toolbar) {
+	min-height: 48px;
+}
+/* NB: md-toolbar-tools creates flex row */
+md-toolbar.md-tadkit-theme .md-toolbar-tools {
+	height: 48px;
+	max-height: 48px;
+}
+/* Genome region smaller than organism title */
+md-toolbar.md-tadkit-theme .tad-region, {
+	font-size: 1.0rem;
+}
+/* Topbar icons in white */
+a.md-button.md-tadkit-theme.md-accent:not([disabled]) md-icon,
+.md-button.md-tadkit-theme.md-accent:not([disabled]) md-icon,
+md-toolbar.md-tadkit-theme:not(.md-menu-toolbar) md-icon,
+md-input-container.md-tadkit-theme:not(.md-input-invlaid).md-input-focused md-icon {
+	color: #fff;
+}
+md-input-container.md-tadkit-theme .md-input {
+	text-align: end;
+	color: #fff;
+	border-color: rgba(255,255,255,0.1);
+	font-size: 1.0rem;
+}
+md-input-container.md-tadkit-theme .md-input:focus {
+	background-color: rgba(255,255,255,0.25);
+}
+md-input-container.md-tadkit-theme .md-errors-spacer {
+	float: none;
+    min-height: 0;
+}
+
+/*md-input-container.md-icon-float>md-icon {
+	position: absolute;
+	top: 14px;
+	left: 24px;
+}
+*/
+.md-button.md-icon-button.md-tadkit-theme {
+	width: auto;
+}
+md-checkbox.md-tadkit-theme { margin: 3px; }
+
+/*** SIDEBARS ***/
+md-sidenav.md-tadkit-theme.md-locked-open { /*unused*/
+  /*width: 244px;*/
+  /*min-width: 244px;*/
+  /*max-width: 244px;*/
+}
+md-sidenav.md-tadkit-theme md-list-item {
+/*  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0px 16px;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  width: 100%;
+*/
+   /*max-height: 40px;*/
+}
+
+/*** Components ***/
+/*md-grid-list.md-tadkit-theme md-grid-tile md-grid-tile-header,
+md-grid-list.md-tadkit-theme md-grid-tile md-grid-tile-footer {
+	color: inherit;
+	background: rgba(255, 255, 255, 0.28);
+}
+*/
+/* Panels */
+/*md-list-item.md-tadkit-theme .md-secondary-container,
+md-list-item.md-tadkit-theme .md-secondary,
+md-list-item.md-tadkit-theme .md-list-item-inner .md-secondary-container,
+md-list-item.md-tadkit-theme .md-list-item-inner .md-secondary {
+  margin-left: 16px;
+  position: absolute;
+  right: 16px;
+  top: 10%;
+}
+*/

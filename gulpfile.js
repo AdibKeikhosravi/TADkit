@@ -2,20 +2,21 @@
 var gulp = require('gulp'); 
 
 // Include Plugins
-var ngConstant = require('gulp-ng-constant');
-// var jscs = require('gulp-jscs');
-var jshint = require('gulp-jshint');
+var cleanCss = require('gulp-clean-css');
+var concat = require('gulp-concat');
 // var dgeni = require('gulp-dgeni');
 // var ngdoc = require('dgeni-packages/ngdoc');
 // var documentation = require('gulp-documentation');
-var ngDocs = require('gulp-ngdocs');
-// var sass = require('gulp-sass');
-var concat = require('gulp-concat');
-var ngAnnotate = require('gulp-ng-annotate');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
 var header = require('gulp-header');
+// var jscs = require('gulp-jscs');
+var jshint = require('gulp-jshint');
+var ngAnnotate = require('gulp-ng-annotate');
+var ngConstant = require('gulp-ng-constant');
+var ngDocs = require('gulp-ngdocs');
 var plumber = require('gulp-plumber');
+var rename = require('gulp-rename');
+// var sass = require('gulp-sass');
+var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
 var opn = require('opn');
 var server = {
@@ -144,7 +145,6 @@ gulp.task('dist-modules', function() {
 		.pipe(rename('modules.min.js'))
 		.pipe(ngAnnotate())
 		.pipe(uglify())
-		.pipe(gulp.dest('dist')) // isolated dist but requires app
 		.pipe(gulp.dest('tadkit/assets/js'));
 });
 
@@ -196,7 +196,8 @@ gulp.task('assets-libs', function() {
 		'bower_components/threejs/build/three.min.js',
 		'bower_components/threejs/examples/js/controls/TrackballControls.js',
 		'bower_components/threejs/examples/js/controls/OrbitControls.js',
-		'bower_components/jsorolla/**/*' // temporary untill module comverted to bower
+		'bower_components/jsorolla/**/*', // temporary untill module comverted to bower
+		'bower_components/genoverse/*' // fake bower... copied from github repo
 		])
 		.pipe(gulp.dest('src/assets/js'))
 		.pipe(gulp.dest('tadkit/assets/js'));
@@ -225,10 +226,26 @@ gulp.task('assets-html', function() {
 // 		.pipe(gulp.dest('src/assets/css'));
 // });
 
+// Minify and Transfer App CSS
+gulp.task('app-css', function() {
+	return gulp.src([
+		'src/assets/css/tadkit-material.css',
+		'src/assets/css/tadkit-core.css',
+		'src/assets/css/tadkit-svg.css',
+		'src/assets/css/tadkit-typography.css'
+		])
+		.pipe(concat('tadkit.css'))
+		.pipe(gulp.dest('tadkit/assets/css'))
+		.pipe(cleanCss())
+		.pipe(rename('tadkit.min.css'))
+		.pipe(gulp.dest('tadkit/assets/css'));
+});
+
 // Transfer CSS Assets
 gulp.task('assets-css', function() {
 	return gulp.src([
-		'src/assets/css/*.css'
+		'src/assets/css/*.css',
+		'!src/assets/css/tadkit-*.css'
 		])
 		.pipe(gulp.dest('tadkit/assets/css'));
 });
@@ -319,6 +336,7 @@ gulp.task('watch', function() {
 		'app-favicon',
 		'assets-libs',
 		'assets-html',
+		'app-css',
 		'assets-css',
 		'assets-fonts',
 		'assets-img',
@@ -342,6 +360,7 @@ gulp.task('default', [
 	'app-favicon',
 	'assets-libs',
 	'assets-html',
+	'app-css',
 	'assets-css',
 	'assets-fonts',
 	'assets-img',

@@ -253,10 +253,10 @@
 				},
 				"object" : {
 					"uuid" : "00000000-0000-0000-0000-000000000004",
-					"id" : "browser-jsorolla",
+					"id" : "browser-genoverse",
 					"title" : "Browser",
-					"type" : "browser-jsorolla",
-					"dataset" : "jsorolla",
+					"type" : "browser-genoverse",
+					"dataset" : "genoverse",
 					"state" : {
 						"width" : "100%",
 						"height" : "auto",
@@ -266,8 +266,6 @@
 				},
 				"view" : {
 					"viewpoint" : {
-						"species" : "default",
-						"chrom" : 1,
 						"chromStart" : 1,
 						"chromEnd" : 999999,
 						"scale" : 1
@@ -283,7 +281,8 @@
 						"cursorWidth" : 1
 					}
 				}
-			}	
+			}
+	
 		]
 	}
 ]

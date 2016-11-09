@@ -94,12 +94,10 @@ angular.module("TADkit")
 			.accentPalette("lime", {
 				"default": "500"
 			})
-   			.warnPalette("red", {
+   			.warnPalette("blue", {
 				"default": "500"
 			});
 			// .backgroundPalette("grey");
-		$mdThemingProvider.theme("darkKit")
-			.dark();
 		$mdThemingProvider.setDefaultTheme('tadkit');
 
 		$provide.decorator('mdButtonDirective', ['$delegate',
@@ -2987,8 +2985,8 @@ angular.module("TADkit")
 					var AVAILABLE_SPECIES;
 					// var CELLBASE_HOST = 'https://wwwdev.ebi.ac.uk/cellbase';
 					// var CELLBASE_HOST = 'https://www.ebi.ac.uk/cellbase';
-					var CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
-					// var CELLBASE_HOST = "http://bioinfo.hpc.cam.ac.uk/cellbase";
+					// var CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
+					var CELLBASE_HOST = "http://bioinfo.hpc.cam.ac.uk/cellbase";
 
 					var CELLBASE_VERSION = "v3";
 
@@ -3090,7 +3088,8 @@ angular.module("TADkit")
 							drawNavigationBar : false,
 							drawKaryotypePanel : false,
 							drawChromosomePanel : false,
-							drawOverviewTrackListPanel : false
+							drawOverviewTrackListPanel : false,
+							drawStatusBar : false
 						});
 
 						var tracks = [];
@@ -3120,6 +3119,7 @@ angular.module("TADkit")
 							maxLabelRegionSize : 10000000,
 							minTranscriptRegionSize : 200000,
 							height : 100,
+							resizable : true,
 
 							renderer: new GeneRenderer({
 								handlers: {
@@ -3129,14 +3129,13 @@ angular.module("TADkit")
 									}
 								}
 							}),
-
 							dataAdapter : new CellBaseAdapter({
 								category : "genomic",
 								subCategory : "region",
 								resource : "gene",
 								species : genomeViewer.species,
 								params : {
-									exclude : 'transcripts'
+									exclude : "transcripts,chunkIds"
 									// exclude : "transcripts.tfbs,transcripts.xrefs,transcripts.exons.sequence"
 								},
 								cacheConfig : {
@@ -4374,13 +4373,13 @@ angular.module("TADkit")
 
 					$rootScope.$on('$stateChangeStart', function() {
 						// cancelAnimationFrame( animation );
-						$log.info("$stateChangeStart");
+						$log.debug("$stateChangeStart");
 					});
 					$rootScope.$on('$stateNotFound', function() {
 						$log.warn("$stateNotFound");
 					});
 					$rootScope.$on('$stateChangeSuccess', function() {
-						$log.info("$stateChangeSuccess");
+						$log.debug("$stateChangeSuccess");
 					});
 					$rootScope.$on('$stateChangeError', function() {
 						$log.warn("$stateChangeError");

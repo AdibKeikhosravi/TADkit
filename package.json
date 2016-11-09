@@ -21,23 +21,25 @@
     "url": "https://github.com/3DGenomes/TADkit/issues"
   },
   "homepage": "https://github.com/3DGenomes/TADkit",
-  "dependencies": {
-    "dalliance": "^0.13.5"
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "^3.8.7",
+    "gulp-clean-css": "^2.0.10",
     "gulp-concat": "^2.3.4",
     "gulp-dgeni": "^0.1.0",
     "gulp-documentation": "^2.2.0",
-    "gulp-header": "^1.2.2",
+    "gulp-header": "^1.8.7",
     "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.1",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-ng-constant": "^1.1.0",
     "gulp-ngdocs": "^0.2.13",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.0.4",
-    "gulp-uglify": "^1.4.2",
-    "gulp-webserver": "^0.9.1"
+    "gulp-uglify": "^1.5.4",
+    "gulp-webserver": "^0.9.1",
+    "jshint": "^2.9.2",
+    "opn": "^4.0.2"
   }
 }

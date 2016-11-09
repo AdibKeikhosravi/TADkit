@@ -19796,6 +19796,7 @@ CellBaseAdapter.prototype = {
     },
     configureCache: function() {
         var host = this.host || CellBaseManager.host;
+        console.log(this.species);
         var speciesString = this.species.id + this.species.assembly.name.replace(/[/_().\ -]/g, '');
         var cacheId = host + speciesString;
         if (!this.cacheConfig) {

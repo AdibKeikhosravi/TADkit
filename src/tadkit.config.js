@@ -40,12 +40,10 @@
 			.accentPalette("lime", {
 				"default": "500"
 			})
-   			.warnPalette("red", {
+   			.warnPalette("blue", {
 				"default": "500"
 			});
 			// .backgroundPalette("grey");
-		$mdThemingProvider.theme("darkKit")
-			.dark();
 		$mdThemingProvider.setDefaultTheme('tadkit');
 
 		$provide.decorator('mdButtonDirective', ['$delegate',
