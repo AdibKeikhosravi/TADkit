@@ -197,7 +197,7 @@ gulp.task('assets-libs', function() {
 		'bower_components/threejs/examples/js/controls/TrackballControls.js',
 		'bower_components/threejs/examples/js/controls/OrbitControls.js',
 		'bower_components/jsorolla/**/*', // temporary untill module comverted to bower
-		'bower_components/genoverse/*' // fake bower... copied from github repo
+		'bower_components/genoverse/**/*' // fake bower... copied from github repo
 		])
 		.pipe(gulp.dest('src/assets/js'))
 		.pipe(gulp.dest('tadkit/assets/js'));

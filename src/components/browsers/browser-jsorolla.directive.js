@@ -207,7 +207,6 @@
 								species : genomeViewer.species,
 								params : {
 									exclude : "transcripts,chunkIds"
-									// exclude : "transcripts.tfbs,transcripts.xrefs,transcripts.exons.sequence"
 								},
 								cacheConfig : {
 									chunkSize : 100000

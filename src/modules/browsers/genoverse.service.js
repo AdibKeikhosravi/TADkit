@@ -15,79 +15,64 @@
 		.factory('GenoverseService', GenoverseService);
 
 	function GenoverseService(ONLINE, $log, $document, $q, $http, $timeout, $rootScope) {
-		$log.info("Loading Genoverse...");
 
-		// example genoverse-config.txt >> TODO: change to json
-		var genoverseConfigTxt = "{container:'#browser-genoverse-6',genome:'grch38',chr:13,start:32296945,end:32370557,plugins:['controlPanel','karyotype','trackControls','resizer','focusRegion','fullscreen','tooltips','fileDrop'],tracks:[Genoverse.Track.Scalebar]}";
-
-		function loadConfig(config) {
-			var deferred = $q.defer();
-			if (!config) {
-				var configUrl = "modules/genoverse/genoverse-config.txt";
-				$http({
-					url : configUrl,
-					method : 'GET',
-					transformResponse : undefined,
-					responseType : 'text'
-				})
-				.success( function(configText) {
-					console.log(configText);
-					config = configText;
-					$log.debug("Genoverse default config loaded from " + configUrl);
-					deferred.resolve(config);
-				});
-				console.log("Genoverse default config loaded.");
-			}
-			return deferred.promise;
-		}
+		/*** Example Genoverse Config File
+		 *
+		 *    "container" is the HTML element to contain the browser.
+		 *    "genome" points to a file in '/genomes' containing JSON :
+		 *           a) to determine the length of chromosomes (the size property)
+		 *           b) to draw the chromosome using the karyotype plugin.
+		 *    "chr", "start", "end" define the initial range cordinates.
+		 *    "plugins" specifies plugins to initialize on load.
+		 *    "tracks" specifies initial tracks to load.
+		 *
+		 *	{
+		 *		"container" : "#browser-genoverse-6",
+		 *		"genome" : "grch38",
+		 *		"chr" : 13,
+		 *		"start" : 32296945,
+		 *		"end" : 32370557,
+		 *		"plugins" : [ "controlPanel", "karyotype", "trackControls", "resizer", "focusRegion", "fullscreen", "tooltips", "fileDrop" ],
+		 *		"tracks" : [ "Genoverse.Track.Scalebar" ]
+		 *	}
+		 *
+		 */
 
 		return {
-			load: function(config) {
-				config = config || "";
+			/**
+			 * @ngdoc function
+			 * @name browsers.service:GenoverseService#load
+			 * @methodOf browsers.service:GenoverseService
+			 * @kind function
+			 *
+			 * @description
+			 * A function that loads the files required to initialize and run Genoverse.
+			 * Uses $q.all to ensure all are loaded before returning.
+			 *
+			 * @returns {Array} results of appending the files.
+			 * [ null | undefined | String | Array | Object | don't know ].
+			 */
+			load: function() {
+				$log.log("Genoverse Browser loading...");
 
-				$log.log("Genoverse loading...");
-				var deferred = $q.defer();
+				var assetsPath = "assets/js/genoverse/";
+				var configFile = "modules/genoverse/genoverse-config.txt";
+				var resources = [];
+				resources.push("modules/browsers/genoverse-reset.css");
+				resources.push(assetsPath + "js/genoverse.combined.js");
 
-				function loadScriptTags() {
-					// Create a script tag with Genoverse as the source.
-					// Call our onScriptLoad callback when it has loaded.
-					var scriptTag = $document[0].createElement("script");
-					scriptTag.type = "text/javascript";
-					scriptTag.async = true;
-					scriptTag.text = config;
-					if (ONLINE) {
-						scriptTag.src = 'http://wtsi-web.github.io/Genoverse/js/genoverse.combined.js';
-					} else {
-						scriptTag.src = 'assets/js/genoverse.combined.js';
-					}
-					scriptTag.onreadystatechange = function () {
-						if (this.readyState == 'complete') {
-							onScriptLoad();	
-						}
-					};
-					scriptTag.onload = onScriptLoad();
+				var appendResources = [];
+				angular.forEach(resources, function(filename, key) {
+					appendResources.push(Files.appendToHTML(filename));
+				});
+				appendResources.push(Files.loadConfig(configFile));
 
-					var cssReset = $document[0].createElement("link");
-					cssReset.rel = "stylesheet";
-					cssReset.type = 'text/css';
-					cssReset.href = "modules/browsers/genoverse-reset.css";
-
-					var node = $document[0].getElementsByTagName('body')[0];
-					node.appendChild(scriptTag);
-					node.appendChild(cssReset);
-				}
-
-				function onScriptLoad() {
-					$log.log("Genoverse loaded OK!");
-					$timeout(function() {
-					// $rootScope.$apply(function() {
-						deferred.resolve(window.Genoverse);
-					});
-				}
-
-				loadConfig(config);
-				loadScriptTags();
-				return deferred.promise;
+				return $q.all(appendResources)
+				.then(function(results) {
+					$log.debug(results);
+					$log.log("Genoverse Browser loaded OK!");
+					return results;
+				});
 			}
 		};
 	}

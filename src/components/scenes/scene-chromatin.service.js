@@ -10,7 +10,7 @@
 			if (VERBOSE) $log.debug(colors);
 
 			var defaults = {
-				visible: true,
+				color : "#cccccc",
 				genomeLength: 816394, // bactieria mycoplasma_pneumoniae_m129
 				particles: 0,
 				particleSegments: 5,
@@ -18,7 +18,8 @@
 				radius: 15,
 				radiusSegments: 16,
 				endcap: false,
-				pathClosed: false
+				pathClosed: false,
+				visible: true
 			};		
 			settings = settings || {};
 			angular.extend(this, angular.copy(defaults), settings);

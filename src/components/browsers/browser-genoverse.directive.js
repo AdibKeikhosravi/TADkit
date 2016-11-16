@@ -18,18 +18,24 @@
 		.module('TADkit')
 		.directive('tkComponentBrowserGenoverse', tkComponentBrowserGenoverse);
 
-	function tkComponentBrowserGenoverse(VERBOSE, $log, GenoverseService) {
+	function tkComponentBrowserGenoverse(VERBOSE, $window, $log, GenoverseService) {
 		return {
 			restrict: 'E',
 			templateUrl: 'assets/templates/browser.html',
 			link: function(scope, element, attrs) {
-				var config = "{container:'#" + scope.component.object.idIndex + "'";
-				config += ",genome:'grch38'";
-				config += ",chr:1";// + scope.component.view.viewpoint.chrom;
-				config += ",start:" + scope.component.view.viewpoint.chromStart;
-				config += ",end:" + scope.component.view.viewpoint.chromEnd;
-				config += ",plugins:['fileDrop']";
-				config += ",tracks:[";
+				var genome = "grch38";
+				var chromosomeSize = 249250621; // chromosome 1, human
+				var config = "{container:'#" + scope.component.object.idIndex + "',";
+				if (genome === null) {
+					config += "chromosomeSize:" + chromosomeSize + ",";
+				} else {
+					config += "genome:'" + genome + "',";
+				}
+				config += "chr:'" + scope.component.view.viewpoint.chrom + "',";
+				config += "start:" + scope.component.view.viewpoint.chromStart + ",";
+				config += "end:" + scope.component.view.viewpoint.chromEnd + ",";
+				config += "plugins:['fileDrop']" + ",";
+				config += "tracks:[";
 					config += "Genoverse.Track.Scalebar,";
 					config += "Genoverse.Track.extend({name:'Sequence',controller:Genoverse.Track.Controller.Sequence,model:Genoverse.Track.Model.Sequence.Ensembl,view:Genoverse.Track.View.Sequence,100000:false,resizable:'auto'}),";
 					config += "Genoverse.Track.Gene,";
@@ -37,9 +43,10 @@
 					config += "Genoverse.Track.dbSNP";
 					config += "]}";
 
-				GenoverseService.load(config).then(function(Genoverse) {
-					$log.debug(window.Genoverse);
-				});		
+				GenoverseService.load(config).then(function() {
+					$log.info($window.Genoverse);
+				});
+
 			}
 		};
 	}

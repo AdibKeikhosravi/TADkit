@@ -191,6 +191,108 @@
 	'use strict';
 	/**
 	 * @ngdoc service
+	 * @name generic.service:Files
+	 * @module generic
+	 *
+	 * @description
+	 * File utilities.
+	 *
+	 */
+	angular
+		.module('generic')
+		.factory('Files', Files);
+
+	function Files() {
+		return {
+			/**
+			 * @ngdoc function
+			 * @name generic.service:Files#appendToHTML
+			 * @methodOf generic.service:Files
+			 * @kind function
+			 *
+			 * @description
+			 * A function that appends files to HTML
+			 *
+			 * @param {string} filename to append to HTML
+			 * @returns {string} result of file appended
+			 * [ null | undefined | String | Array | Object | don't know ].
+			 */
+			appendToHTML: function(filename) {
+					var deferred = $q.defer();
+
+					var filetype = filename.substr(filename.lastIndexOf('.')+1);
+					var resource = {
+						"filename" : filename,
+						"filetype" : filetype
+					};
+					if (filetype == "css") {
+						resource.nodeName = "link";
+					} else if (filetype == "js") {
+						resource.nodeName = "script";
+					} else {
+						$log.warn("FilesService: \"" + filetype + "\" is not a valid filetype!");
+						// return deferred.resolve();
+					}
+
+					function onLoad() {
+						$rootScope.$apply(function() {
+							$log.debug("Loaded: " + resource.filename);
+							deferred.resolve(resource);
+						});
+					}
+
+					function appendResource(resource) {
+						var node = $document[0].createElement(resource.nodeName);
+							if (resource.nodeName == "link") {
+								node.type = "text/css";
+								node.href = resource.filename;
+								node.rel = "stylesheet";
+							} else if (resource.nodeName == "script") {
+								node.type = "text/javascript";
+								node.src = resource.filename;
+								node.async = true;
+								// node.text = config;
+							}
+							node.onreadystatechange = function () { if (this.readyState == "complete") onLoad(); };
+							node.onload = onLoad;
+
+						var parent = $document[0].getElementsByTagName("body")[0];
+							parent.appendChild(node);
+					}
+
+					appendResource(resource);
+					return deferred.promise;
+			},
+
+			loadConfig: function(configFile) {
+				var deferred = $q.defer();
+				if (!configFile) {
+					// no file...
+				} else {
+					$http({
+						url : configFile,
+						method : 'GET',
+						transformResponse : undefined,
+						responseType : 'text'
+					})
+					.success( function(configText) {
+						console.log(configText);
+						config = configText;
+						$log.debug("Genoverse default config loaded from " + configFile);
+						deferred.resolve(config);
+					});
+					console.log("Genoverse default config loaded.");
+				}
+				return deferred.promise;
+			}
+
+		};
+	}
+})();
+(function() {
+	'use strict';
+	/**
+	 * @ngdoc service
 	 * @name generic.service:Utils
 	 * @module generic
 	 *
@@ -920,79 +1022,64 @@
 		.factory('GenoverseService', GenoverseService);
 
 	function GenoverseService(ONLINE, $log, $document, $q, $http, $timeout, $rootScope) {
-		$log.info("Loading Genoverse...");
 
-		// example genoverse-config.txt >> TODO: change to json
-		var genoverseConfigTxt = "{container:'#browser-genoverse-6',genome:'grch38',chr:13,start:32296945,end:32370557,plugins:['controlPanel','karyotype','trackControls','resizer','focusRegion','fullscreen','tooltips','fileDrop'],tracks:[Genoverse.Track.Scalebar]}";
-
-		function loadConfig(config) {
-			var deferred = $q.defer();
-			if (!config) {
-				var configUrl = "modules/genoverse/genoverse-config.txt";
-				$http({
-					url : configUrl,
-					method : 'GET',
-					transformResponse : undefined,
-					responseType : 'text'
-				})
-				.success( function(configText) {
-					console.log(configText);
-					config = configText;
-					$log.debug("Genoverse default config loaded from " + configUrl);
-					deferred.resolve(config);
-				});
-				console.log("Genoverse default config loaded.");
-			}
-			return deferred.promise;
-		}
+		/*** Example Genoverse Config File
+		 *
+		 *    "container" is the HTML element to contain the browser.
+		 *    "genome" points to a file in '/genomes' containing JSON :
+		 *           a) to determine the length of chromosomes (the size property)
+		 *           b) to draw the chromosome using the karyotype plugin.
+		 *    "chr", "start", "end" define the initial range cordinates.
+		 *    "plugins" specifies plugins to initialize on load.
+		 *    "tracks" specifies initial tracks to load.
+		 *
+		 *	{
+		 *		"container" : "#browser-genoverse-6",
+		 *		"genome" : "grch38",
+		 *		"chr" : 13,
+		 *		"start" : 32296945,
+		 *		"end" : 32370557,
+		 *		"plugins" : [ "controlPanel", "karyotype", "trackControls", "resizer", "focusRegion", "fullscreen", "tooltips", "fileDrop" ],
+		 *		"tracks" : [ "Genoverse.Track.Scalebar" ]
+		 *	}
+		 *
+		 */
 
 		return {
-			load: function(config) {
-				config = config || "";
+			/**
+			 * @ngdoc function
+			 * @name browsers.service:GenoverseService#load
+			 * @methodOf browsers.service:GenoverseService
+			 * @kind function
+			 *
+			 * @description
+			 * A function that loads the files required to initialize and run Genoverse.
+			 * Uses $q.all to ensure all are loaded before returning.
+			 *
+			 * @returns {Array} results of appending the files.
+			 * [ null | undefined | String | Array | Object | don't know ].
+			 */
+			load: function() {
+				$log.log("Genoverse Browser loading...");
 
-				$log.log("Genoverse loading...");
-				var deferred = $q.defer();
+				var assetsPath = "assets/js/genoverse/";
+				var configFile = "modules/genoverse/genoverse-config.txt";
+				var resources = [];
+				resources.push("modules/browsers/genoverse-reset.css");
+				resources.push(assetsPath + "js/genoverse.combined.js");
 
-				function loadScriptTags() {
-					// Create a script tag with Genoverse as the source.
-					// Call our onScriptLoad callback when it has loaded.
-					var scriptTag = $document[0].createElement("script");
-					scriptTag.type = "text/javascript";
-					scriptTag.async = true;
-					scriptTag.text = config;
-					if (ONLINE) {
-						scriptTag.src = 'http://wtsi-web.github.io/Genoverse/js/genoverse.combined.js';
-					} else {
-						scriptTag.src = 'assets/js/genoverse.combined.js';
-					}
-					scriptTag.onreadystatechange = function () {
-						if (this.readyState == 'complete') {
-							onScriptLoad();	
-						}
-					};
-					scriptTag.onload = onScriptLoad();
+				var appendResources = [];
+				angular.forEach(resources, function(filename, key) {
+					appendResources.push(Files.appendToHTML(filename));
+				});
+				appendResources.push(Files.loadConfig(configFile));
 
-					var cssReset = $document[0].createElement("link");
-					cssReset.rel = "stylesheet";
-					cssReset.type = 'text/css';
-					cssReset.href = "modules/browsers/genoverse-reset.css";
-
-					var node = $document[0].getElementsByTagName('body')[0];
-					node.appendChild(scriptTag);
-					node.appendChild(cssReset);
-				}
-
-				function onScriptLoad() {
-					$log.log("Genoverse loaded OK!");
-					$timeout(function() {
-					// $rootScope.$apply(function() {
-						deferred.resolve(window.Genoverse);
-					});
-				}
-
-				loadConfig(config);
-				loadScriptTags();
-				return deferred.promise;
+				return $q.all(appendResources)
+				.then(function(results) {
+					$log.debug(results);
+					$log.log("Genoverse Browser loaded OK!");
+					return results;
+				});
 			}
 		};
 	}
@@ -1009,75 +1096,42 @@
 		.module('browsers')
 		.factory('JsorollaService', JsorollaService);
 
-	function JsorollaService($rootScope, $log, $document, $q, $timeout) {
-		var ASSETS = "assets/js/genome-viewer/";
-
-		function append(filename) {
-				var deferred = $q.defer();
-
-				var filetype = filename.substr(filename.lastIndexOf('.')+1);
-				var resource = {
-					"filename" : filename,
-					"filetype" : filetype
-				};
-				if (filetype == "css") {
-					resource.nodeName = "link";
-				} else if (filetype == "js") {
-					resource.nodeName = "script";
-				} else {
-					$log.warn("JsorollaService: \"" + filetype + "\" is not a valid filetype!");
-					// return deferred.resolve();
-				}
-
-				function onLoad() {
-					$rootScope.$apply(function() {
-						// console.log("Loaded: " + resource.filename);
-						deferred.resolve(resource);
-					});
-				}
-
-				function appendResource(resource) {
-					var node = $document[0].createElement(resource.nodeName);
-						if (resource.nodeName == "link") {
-							node.type = "text/css";
-							node.href = ASSETS + resource.filename;
-							node.rel = "stylesheet";
-						} else if (resource.nodeName == "script") {
-							node.type = "text/javascript";
-							node.src = ASSETS + resource.filename;
-							node.async = true;
-							// node.text = config;
-						}
-						node.onreadystatechange = function () { if (this.readyState == "complete") onLoad(); };
-						node.onload = onLoad;
-
-					var parent = $document[0].getElementsByTagName("body")[0];
-						parent.appendChild(node);
-				}
-
-				appendResource(resource);
-				return deferred.promise;
-		}
-
+	function JsorollaService($rootScope, $log, $document, $q, $timeout, Files) {
 		return {
+			/**
+			 * @ngdoc function
+			 * @name browsers.service:JsorollaService#load
+			 * @methodOf browsers.service:JsorollaService
+			 * @kind function
+			 *
+			 * @description
+			 * A function that loads the files required to initialize and run OpenCB Jsorolla API.
+			 * Uses $q.all to ensure all are loaded before returning.
+			 * Currently only loads the Genome Viewer component.
+			 *
+			 * @returns {Array} results of appending the files.
+			 * [ null | undefined | String | Array | Object | don't know ].
+			 */
 			load: function() {
 				$log.log("OpenCB Jsorolla Genome Viewer loading...");
 
+				var assetsPath = "assets/js/genome-viewer/";
+
 				var resources = [];
-				resources.push("vendor/fontawesome/css/font-awesome.min.css");
-				resources.push("vendor/qtip2/jquery.qtip.min.css");
-				resources.push("styles/css/style.css");
-				resources.push("vendor/underscore/underscore-min.js");
-				resources.push("vendor/backbone/backbone.js");
-				resources.push("vendor/jquery/dist/jquery.min.js");
-				resources.push("vendor/qtip2/jquery.qtip.min.js");
-				resources.push("vendor/uri.js/src/URI.min.js");
-				resources.push("gv-config.js");
-				resources.push("genome-viewer.js");
+				resources.push(assetsPath + "vendor/fontawesome/css/font-awesome.min.css");
+				resources.push(assetsPath + "vendor/qtip2/jquery.qtip.min.css");
+				resources.push(assetsPath + "styles/css/style.css");
+				resources.push(assetsPath + "vendor/underscore/underscore-min.js");
+				resources.push(assetsPath + "vendor/backbone/backbone.js");
+				resources.push(assetsPath + "vendor/jquery/dist/jquery.min.js");
+				resources.push(assetsPath + "vendor/qtip2/jquery.qtip.min.js");
+				resources.push(assetsPath + "vendor/uri.js/src/URI.min.js");
+				resources.push(assetsPath + "gv-config.js");
+				resources.push(assetsPath + "genome-viewer.js");
 
 				var appendResources = [];
 				angular.forEach(resources, function(filename, key) {
-					appendResources.push(append(filename));
+					appendResources.push(Files.appendToHTML(filename));
 				});
 
 				return $q.all(appendResources)
