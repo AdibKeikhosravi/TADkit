@@ -915,7 +915,7 @@
 			        document.body.removeChild(dlLink);
 			    };
 			    scope.$watch('currentoverlay.colors.chromatin', function( newColors, oldColors ) {
-					if ( newColors !== oldColors) {
+					if ( newColors !== oldColors && scope.view.settings.overlay_tracks) {
 						currentOverlay = {
 					    		color: []
 							};

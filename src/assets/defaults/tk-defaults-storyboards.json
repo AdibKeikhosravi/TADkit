@@ -154,6 +154,7 @@
 								"url" : "http://wwwdev.ebi.ac.uk/mug/api/adjacency/getInteractions?user_id=test&file_id=test&no_links=1"
 							}
 						},
+						"overlay_tracks": true,
                         "example" : 1
                     }
                 }
